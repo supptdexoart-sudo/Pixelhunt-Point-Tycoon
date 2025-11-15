@@ -2,11 +2,11 @@ const CACHE_NAME = 'pixel-point-tycoon-cache-v2';
 // Add main files to pre-cache. The rest will be cached on demand.
 const urlsToCache = [
   '/',
-  'index.html',
-  './public/manifest.json',
-  './public/icon-192.svg',
-  './public/icon-512.svg',
-  './public/apple-touch-icon.svg'
+  '/index.html',
+  '/manifest.json',
+  '/icon-192.svg',
+  '/icon-512.svg',
+  '/apple-touch-icon.svg'
 ];
 
 self.addEventListener('install', (event) => {
