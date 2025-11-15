@@ -51,4 +51,4 @@ jobs:
           # Token pro autorizaci, generuje se automaticky
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Složka, která se má nasadit (výstup z 'npm run build')
-          publish_dir: ./build
+          publish_dir: ./dist
