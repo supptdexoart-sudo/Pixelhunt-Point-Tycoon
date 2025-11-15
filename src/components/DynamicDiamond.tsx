@@ -6,6 +6,7 @@ interface DynamicDiamondProps {
     isShaking: boolean;
     isExploding: boolean;
     isHit?: boolean;
+    // FIX: Add 'isCorrupted' prop to DynamicDiamondProps.
     isCorrupted?: boolean;
 }
 
