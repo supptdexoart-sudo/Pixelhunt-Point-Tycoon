@@ -1,3 +1,4 @@
+
 # Název workflow, který se zobrazí v záložce "Actions" na GitHubu
 name: Deploy to GitHub Pages
 
@@ -33,7 +34,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Můžete upravit podle verze, kterou používáte
+          node-version: '20'
           cache: 'npm'
 
       # 3. Krok: Nainstaluje závislosti projektu
@@ -50,5 +51,5 @@ jobs:
         with:
           # Token pro autorizaci, generuje se automaticky
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Složka, která se má nasadit (výstup z 'npm run build')
+          # Složka, která se má nasadit (výstup z 'npm run build' pro Vite je 'dist')
           publish_dir: ./dist
