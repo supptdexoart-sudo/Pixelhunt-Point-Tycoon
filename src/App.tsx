@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -355,6 +356,7 @@ const App: React.FC = () => {
     };
   }, [points, upgrades, stats, allPrestigeUpgrades, lastDailyReward, lastTimeBonus, adBonusEndTime, adBonusCooldownEndTime, diamondCore, claimableQuests, claimedQuests, claimedTierRewards, hasCompletedGenesis, shopPurchases, activeCosmetic, hasSeenRiftIntro, hasSeenFloatingRewardIntro, hasSeenShopIntro, hasOpenedShop, inventory, inventoryCapacity, npcs, expeditions, hasSeenExpeditionIntro, hasOpenedExpeditions, hasSeenPrestigeIntro, hasSeenRetainIntro, rogueClass, hasChosenRogueClass, activeBonuses, collectedCards, nextPrestigeRelicBonus, activeDailyQuests, lastDailyQuestReset]);
 
+  // FIX: Reordered memoized calculations to fix dependency issues and resolved redeclaration errors.
   // --- Calculated Values ---
   const prestigeUpgrades = useMemo(() => {
     if (rogueClass && allPrestigeUpgrades[rogueClass]) {
@@ -434,7 +436,6 @@ const App: React.FC = () => {
   const pointsScalingFactor = useMemo(() => 1 + Math.log10(Math.max(1, stats.totalPointsEarned)) / 2, [stats.totalPointsEarned]);
 
   const prestigeBonuses = useMemo(() => {
-    // FIX: Explicitly type 'upg' as PrestigeUpgrade to resolve type inference issues with Object.values() and .flat().
     return Object.values(allPrestigeUpgrades).flat().reduce((acc, upg: PrestigeUpgrade) => {
       if (upg.level > 0) {
         acc[upg.id] = upg.getBonus(upg.level);
@@ -461,8 +462,7 @@ const App: React.FC = () => {
   const basePointsPerClick = useMemo(() => (upgrades.filter(u => u.type === 'ppc' && u.level > 0).reduce((sum, u) => sum + (u.value * u.level), 1)) * (1 + permanentCardBonuses.ppcMultiplier) * pointsScalingFactor * rogueClassBonuses.ppcMultiplier, [upgrades, permanentCardBonuses.ppcMultiplier, pointsScalingFactor, rogueClassBonuses]);
   
   const totalPpcBonus = (prestigeBonuses.guardian_ppc_bonus || 0);
-  const pointsPerClick = useMemo(() => basePointsPerClick * (1 + totalPpcBonus), [basePointsPerClick, totalPpcBonus]);
-
+  
   const basePointsPerSecond = useMemo(() => {
       const basePpsFromNormalUpgrades = upgrades.filter(u => u.type === 'pps' && u.level > 0).reduce((sum, u) => sum + (u.value * u.level), 0) * pointsScalingFactor;
       const ppsFromRelicResonance = upgrades.filter(u => u.type === 'pps_relic_scaled' && u.level > 0).reduce((sum, u) => sum + u.value * u.level * stats.relics, 0);
@@ -487,6 +487,7 @@ const App: React.FC = () => {
         critDamage: 0,
         isMidasTouch: false,
         ppsMultiplier: 1,
+        ppcMultiplier: 1,
         floatingRewardMultiplier: 1,
         costReduction: 1,
         comboWindowMultiplier: 1,
@@ -499,10 +500,14 @@ const App: React.FC = () => {
             if (b.type === 'FLOATING_REWARD_BONUS') active.floatingRewardMultiplier *= b.value;
             if (b.type === 'UPGRADE_COST_REDUCTION') active.costReduction *= (1 - b.value);
             if (b.type === 'COMBO_WINDOW_INCREASE') active.comboWindowMultiplier += b.value;
+            if (b.type === 'PPC_BOOST') active.ppcMultiplier += b.value;
+            if (b.type === 'PPC_REDUCTION') active.ppcMultiplier *= (1 - b.value);
         }
     });
     return active;
   }, [activeBonuses]);
+
+  const pointsPerClick = useMemo(() => basePointsPerClick * (1 + totalPpcBonus) * activeTempBonuses.ppcMultiplier, [basePointsPerClick, totalPpcBonus, activeTempBonuses.ppcMultiplier]);
 
   const pointsPerSecond = useMemo(() => {
     const totalPpsBonus = (prestigeBonuses.alchemist_pps_bonus || 0);
@@ -528,7 +533,6 @@ const App: React.FC = () => {
   }, [stats.totalPointsEarned, prestigeBonuses.prospector_relic_gain, shopPurchases.relicBoostLevel, nextPrestigeRelicBonus]);
 
   const activeSkillBonuses = useMemo(() => {
-    // FIX: Explicitly type 'upg' as PrestigeUpgrade to resolve type inference issues with Object.values() and .flat().
     return Object.values(allPrestigeUpgrades).flat()
         .filter((upg: PrestigeUpgrade) => upg.level > 0)
         .map((upg: PrestigeUpgrade) => {
@@ -818,9 +822,18 @@ const App: React.FC = () => {
                 setNextPrestigeRelicBonus(prev => prev + card.value);
                 triggerToast(t('card_prospector_boon_toast', { value: card.value * 100 }));
             }
+            if (card.type === 'SHARD_GAMBLE') {
+                if (Math.random() < 0.5) {
+                    setStats(s => ({ ...s, shards: (s.shards || 0) + 3 }));
+                    triggerToast(t('shard_gamble_win_toast'));
+                } else {
+                    setStats(s => ({ ...s, shards: Math.max(0, (s.shards || 0) - 1) }));
+                    triggerToast(t('shard_gamble_lose_toast'));
+                }
+            }
             break;
         case 'temporary':
-            if (card.type === 'CRIT_DAMAGE_BOOST' || card.type === 'AUTO_CLICKER' || card.type === 'GOLDEN_CLICKS' || card.type === 'PPS_BOOST' || card.type === 'FLOATING_REWARD_BONUS' || card.type === 'UPGRADE_COST_REDUCTION' || card.type === 'COMBO_WINDOW_INCREASE') {
+            if (card.type === 'CRIT_DAMAGE_BOOST' || card.type === 'AUTO_CLICKER' || card.type === 'GOLDEN_CLICKS' || card.type === 'PPS_BOOST' || card.type === 'FLOATING_REWARD_BONUS' || card.type === 'UPGRADE_COST_REDUCTION' || card.type === 'COMBO_WINDOW_INCREASE' || card.type === 'PPC_BOOST') {
                 if (card.duration) {
                     // FIX: TypeScript was unable to infer the narrowed type of `card.type` inside the `setActiveBonuses` callback.
                     // Creating the new bonus object here allows TypeScript to correctly assign the narrowed type.
@@ -832,6 +845,12 @@ const App: React.FC = () => {
                     setActiveBonuses(prev => [...prev, newBonus]);
                     triggerToast(`${t(card.nameKey)} activated!`);
                 }
+            } else if (card.type === 'UNSTABLE_PPS_BOOST' && card.duration) {
+                const expiresAt = Date.now() + (card.duration * 1000 * rogueClassBonuses.bonusDurationMultiplier);
+                const ppsBonus: ActiveBonus = { type: 'PPS_BOOST', value: card.value, expiresAt };
+                const ppcReduction: ActiveBonus = { type: 'PPC_REDUCTION', value: 0.75, expiresAt };
+                setActiveBonuses(prev => [...prev, ppsBonus, ppcReduction]);
+                triggerToast(`${t(card.nameKey)} activated!`);
             }
             break;
         case 'permanent':
@@ -1012,14 +1031,12 @@ const App: React.FC = () => {
     triggerToast(t('ad_bonus_toast'));
   }, [triggerToast, t, rogueClassBonuses]);
 
-  // FIX: Moved applyClaimedQuests function before its usage in confirmPrestige to fix a "used before declaration" error.
   const applyClaimedQuests = useCallback((quests: string[], timesPrestiged: number) => {
       let features = { ...initialUnlockedFeatures };
       const allQuests = initialQuestTiers.flatMap((t: QuestDefinition) => t.quests);
       quests.forEach(questId => {
           const quest = allQuests.find(q => q.id === questId);
           if (quest?.reward.type === 'unlock' && quest.reward.key) {
-            // FIX: Changed 'q' to 'quest' to fix a reference error. 'q' was not defined in this scope.
             const keys = Array.isArray(quest.reward.key) ? quest.reward.key : [quest.reward.key];
             keys.forEach(k => {
                 (features as any)[k] = quest.reward.value;
@@ -1156,7 +1173,6 @@ const App: React.FC = () => {
   const allQuestTiers: QuestTier[] = useMemo(() => initialQuestTiers.map((tier: QuestDefinition) => ({
       ...tier,
       quests: tier.quests.map(q => ({
-          // FIX: Replaced spread `...q` with explicit properties to avoid potential type inference issues with overwritten properties like `reward`.
           id: q.id,
           nameKey: q.nameKey,
           descKey: q.descKey,
@@ -1181,9 +1197,7 @@ const App: React.FC = () => {
                     return newFeatures;
                 });
               }
-// FIX: Use a local variable for reward value to help TypeScript with type narrowing within callbacks.
               const rewardValue = q.reward.value;
-// FIX: Corrected invalid `typeof` comparison. The `typeof` operator returns a string (e.g., "number"), which cannot be compared to a number.
               if (q.reward.type === 'points' && typeof rewardValue === 'number') { addPoints(rewardValue); triggerToast(t('quest_reward_toast', { points: formatNumber(rewardValue) })); }
               if (q.reward.type === 'relics' && typeof rewardValue === 'number') { setStats(s => ({...s, relics: s.relics + rewardValue, totalRelicsEarned: s.totalRelicsEarned + rewardValue})); triggerToast(t('quest_reward_relics', { relics: rewardValue })); }
               if (q.reward.type === 'shards' && typeof rewardValue === 'number') { setStats(s => ({...s, shards: (s.shards || 0) + rewardValue})); triggerToast(t('quest_reward_shards', { shards: rewardValue })); }
@@ -1207,7 +1221,6 @@ const App: React.FC = () => {
   const handleClaimQuestReward = (questId: string) => {
     const quest = allQuestTiers.flatMap(t => t.quests).find(q => q.id === questId);
     
-    // FIX: Look up original quest definition to check reward type, as this information is lost when creating the Quest object.
     const questDef = initialQuestTiers.flatMap(tier => tier.quests).find(q => q.id === questId);
     
     if (quest && questDef && claimableQuests.includes(questId)) {
@@ -2103,7 +2116,6 @@ const App: React.FC = () => {
   // Active Card Bonus Timers
   useEffect(() => {
     if (activeBonuses.length === 0) {
-        // FIX: Corrected a TypeScript comparison error by checking the number of keys in the object, which is a more robust way to check for an empty object.
         if (Object.keys(bonusTimers).length > 0) setBonusTimers({});
         return;
     }
