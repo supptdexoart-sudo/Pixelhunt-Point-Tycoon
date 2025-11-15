@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback, useMemo } from 'react';
-// FIX: Removed .ts extension from import
-import { UserProfile } from '../types';
+import { UserProfile } from '../types.ts';
 
 interface AuthContextType {
   user: UserProfile | null;

@@ -1,4 +1,4 @@
-import { QuestDefinition } from '../types.ts';
+import { QuestDefinition } from '../types';
 
 export const initialQuestTiers: QuestDefinition[] = [
     {

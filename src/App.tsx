@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -56,6 +53,8 @@ import { initialQuestTiers as initialQuestTiersData } from './data/quests';
 import { initialLocations, initialNpcs } from './data/expeditions';
 import { cardPool } from './data/cards';
 import { dailyQuestsPool } from './data/dailyQuests';
+import { roughCardPool } from './data/roughCards';
+
 
 // Constants
 const TIME_BONUS_COOLDOWN = 900; // 15 minutes
@@ -119,6 +118,7 @@ const initialDiamondCore: DiamondCore = {
     level: 0,
     currentHp: 100,
     maxHp: 100,
+    isCorrupted: false,
 };
 
 const initialShopPurchases: ShopPurchases = {
@@ -190,7 +190,7 @@ interface ActiveModals {
     ad: boolean;
     genesisIntro: boolean;
     rogueClass: boolean;
-    cardSelection: boolean;
+    cardSelection: { titleKey: string; descKey: string; cards: Card[] } | null;
     cardJournal: boolean;
     riftIntro: boolean;
     floatingRewardIntro: boolean;
@@ -215,7 +215,7 @@ const initialActiveModals: ActiveModals = {
     ad: false,
     genesisIntro: false,
     rogueClass: false,
-    cardSelection: false,
+    cardSelection: null,
     cardJournal: false,
     riftIntro: false,
     floatingRewardIntro: false,
@@ -303,7 +303,6 @@ const App: React.FC = () => {
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastKey, setToastKey] = useState(0);
-  const [cardsForSelection, setCardsForSelection] = useState<Card[]>([]);
   const [isGamePaused, setIsGamePaused] = useState(false);
   const [comboProgress, setComboProgress] = useState(100);
   const [adBonusTimeLeftFormatted, setAdBonusTimeLeftFormatted] = useState('00:00');
@@ -618,9 +617,37 @@ const App: React.FC = () => {
     setActiveModals(prev => ({ ...prev, rogueClass: false }));
   }, []);
 
+  const handleCorruptedDiamondBreak = useCallback(() => {
+    const shardReward = 3 + Math.floor(stats.timesPrestiged / 5);
+    setStats(s => ({ ...s, shards: (s.shards || 0) + shardReward }));
+    triggerToast(t('corrupted_diamond_break_toast', { count: shardReward }));
+    
+    // Choose from a special 'rough' card pool
+    const shuffled = roughCardPool.sort(() => 0.5 - Math.random());
+    setActiveModals(prev => ({
+        ...prev,
+        cardSelection: {
+            cards: shuffled.slice(0, 3),
+            titleKey: 'rough_card_selection_title',
+            descKey: 'rough_card_selection_desc',
+        }
+    }));
+    
+    // Reset the diamond to a normal one
+    setDiamondCore(prev => ({ ...prev, isCorrupted: false }));
+  }, [stats.timesPrestiged, t, triggerToast]);
+
   const handleDiamondBreak = useCallback((isAutoClick: boolean = false) => {
     setIsDiamondExploding(true);
     trackDailyQuestProgress('dailyDiamondsBroken', 1);
+
+    if (diamondCore.isCorrupted) {
+        setTimeout(() => {
+            handleCorruptedDiamondBreak();
+            setIsDiamondExploding(false);
+        }, 300);
+        return;
+    }
 
     const performBreak = () => {
         const currentConfig = getDiamondConfig(diamondCore.level);
@@ -664,12 +691,18 @@ const App: React.FC = () => {
         });
 
         const shuffled = availableCards.sort(() => 0.5 - Math.random());
-        setCardsForSelection(shuffled.slice(0, 3));
-        setActiveModals(prev => ({ ...prev, cardSelection: true }));
+        setActiveModals(prev => ({ 
+            ...prev, 
+            cardSelection: {
+                cards: shuffled.slice(0, 3),
+                titleKey: 'card_selection_title',
+                descKey: 'card_selection_desc',
+            } 
+        }));
     };
 
     setTimeout(performBreak, 300);
-  }, [addPoints, collectedCards, diamondCore.level, formatNumber, prestigeBonuses, pointsPerSecond, t, triggerToast, upgrades, rogueClassBonuses, trackDailyQuestProgress]);
+  }, [addPoints, collectedCards, diamondCore.level, diamondCore.isCorrupted, formatNumber, prestigeBonuses, pointsPerSecond, t, triggerToast, upgrades, rogueClassBonuses, trackDailyQuestProgress, handleCorruptedDiamondBreak]);
 
   const handleAutoClick = useCallback(() => {
     if (isRiftEventActive || isDiamondExploding) return;
@@ -864,9 +897,9 @@ const App: React.FC = () => {
     const nextLevel = diamondCore.level + 1;
     const nextConfig = getDiamondConfig(nextLevel);
     const newMaxHp = Math.floor(nextConfig.baseHp * Math.pow(1.8, cycle));
-    setDiamondCore({ level: nextLevel, currentHp: newMaxHp, maxHp: newMaxHp });
+    setDiamondCore({ level: nextLevel, currentHp: newMaxHp, maxHp: newMaxHp, isCorrupted: false });
     
-    setActiveModals(prev => ({ ...prev, cardSelection: false }));
+    setActiveModals(prev => ({ ...prev, cardSelection: null }));
   }, [addPoints, t, triggerToast, formatNumber, diamondCore.level, pointsPerSecond, stats.relics, rogueClassBonuses]);
 
   const handleBuyUpgrade = (index: number, buyMax = false) => {
@@ -1898,6 +1931,12 @@ const App: React.FC = () => {
         triggerToast(t('test_complete_daily_quests_toast'));
     }, [triggerToast, t]);
 
+  const handleTestTriggerCorruptedDiamond = useCallback(() => {
+    if (diamondCore.isCorrupted) return;
+    setDiamondCore(prev => ({ ...prev, isCorrupted: true }));
+    triggerToast(t('corrupted_diamond_appeared_toast'));
+  }, [diamondCore.isCorrupted, triggerToast, t]);
+
   // --- Save/Load Logic ---
   const saveGameState = useCallback(() => {
     if (!user || !isGameLoaded) return;
@@ -2201,8 +2240,8 @@ const App: React.FC = () => {
                     hasClaimableRewards={hasClaimableRewards}
                     shouldShopIconGlow={shouldShopIconGlow}
                     shouldGuildIconGlow={shouldGuildIconGlow}
-                    isRiftEventActive={isRiftEventActive}
                     hasClaimableExpeditions={hasClaimableExpeditions}
+                    isRiftEventActive={isRiftEventActive}
                 />
 
                 <main className="flex-grow md:grid md:grid-cols-5 gap-4 px-4 pb-4 min-h-0 overflow-y-auto">
@@ -2292,7 +2331,14 @@ const App: React.FC = () => {
                             <div className="diamond-wrapper-main">
                                 {isShipUnlocked && <SupportShip state={shipState.status} />}
                                 <div className="diamond-wrapper-inner">
-                                    <DynamicDiamond level={diamondCore.level} hpPercentage={(diamondCore.currentHp / diamondCore.maxHp) * 100} isShaking={isDiamondShaking} isExploding={isDiamondExploding} isHit={isCrystalHit} />
+                                    <DynamicDiamond 
+                                        level={diamondCore.level} 
+                                        hpPercentage={(diamondCore.currentHp / diamondCore.maxHp) * 100} 
+                                        isShaking={isDiamondShaking} 
+                                        isExploding={isDiamondExploding} 
+                                        isHit={isCrystalHit}
+                                        isCorrupted={diamondCore.isCorrupted} 
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -2409,11 +2455,12 @@ const App: React.FC = () => {
                             onTestDestroyDiamond={handleTestDestroyDiamond}
                             onResetDailyQuests={handleTestResetDailyQuests}
                             onCompleteDailyQuests={handleTestCompleteDailyQuests}
+                            onTriggerCorruptedDiamond={handleTestTriggerCorruptedDiamond}
                         />}
                         {activeModals.ad && <AdModal isOpen={activeModals.ad} onComplete={handleAdComplete} />}
                         {activeModals.genesisIntro && <GenesisIntroModal isOpen={activeModals.genesisIntro} onClose={handleCloseGenesisIntro} pointsReward={25} upgradeName={t('upgrade_ppc_1_name')} />}
                         {offlineGains !== null && <OfflineGainsModal isOpen={offlineGains !== null} onClose={() => setOfflineGains(null)} pointsGained={offlineGains} formatNumber={formatNumber} />}
-                        {activeModals.cardSelection && <CardSelectionModal isOpen={activeModals.cardSelection} cards={cardsForSelection} onSelectCard={handleSelectCard} />}
+                        {activeModals.cardSelection && <CardSelectionModal isOpen={!!activeModals.cardSelection} cards={activeModals.cardSelection.cards} onSelectCard={handleSelectCard} titleKey={activeModals.cardSelection.titleKey} descKey={activeModals.cardSelection.descKey} />}
                         {activeModals.cardJournal && <CardJournalModal isOpen={activeModals.cardJournal} onClose={() => setActiveModals(prev => ({...prev, cardJournal: false}))} cards={collectedCards} />}
                         {activeModals.riftIntro && <RiftIntroModal isOpen={activeModals.riftIntro} onConfirm={handleConfirmRiftIntro} />}
                         {activeModals.floatingRewardIntro && <FloatingRewardIntroModal isOpen={activeModals.floatingRewardIntro} onConfirm={handleConfirmFloatingRewardIntro} />}

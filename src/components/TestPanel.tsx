@@ -125,7 +125,6 @@ export const TestPanel: React.FC<TestPanelProps> = ({
             <button onClick={onResetDailyQuests} className="pixel-button bg-yellow-800 p-2 w-full">{t('test_reset_daily_quests')}</button>
             <button onClick={onCompleteDailyQuests} className="pixel-button bg-yellow-700 p-2 w-full">{t('test_complete_daily_quests')}</button>
           </div>
-          {/* FIX: Add new button for corrupted diamond event */}
           <button onClick={onTriggerCorruptedDiamond} className="pixel-button bg-purple-800 hover:bg-purple-700 p-2 w-full mt-2">{t('test_trigger_corrupted_diamond')}</button>
 
 

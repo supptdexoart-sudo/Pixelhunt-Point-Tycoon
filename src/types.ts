@@ -72,6 +72,8 @@ export interface DiamondCore {
   level: number;
   currentHp: number;
   maxHp: number;
+  // FIX: Add isCorrupted property to match its usage in src/App.tsx
+  isCorrupted: boolean;
 }
 
 export interface ShopPurchases {

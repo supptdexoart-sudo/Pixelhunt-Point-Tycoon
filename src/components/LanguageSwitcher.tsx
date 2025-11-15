@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation } from '../contexts/LanguageContext.tsx';
+import { useTranslation } from '../contexts/LanguageContext';
 
 export const LanguageSwitcher: React.FC = () => {
   const { language, setLanguage } = useTranslation();
