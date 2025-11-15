@@ -33,6 +33,7 @@ const BonusIcon: React.FC<{ type: ActiveBonus['type']; className?: string }> = (
             return <WaveIcon className={className} />;
         case 'PPC_BOOST':
             return <CrackedLensIcon className={className} />;
+        // FIX: Add case for PPC_REDUCTION
         case 'PPC_REDUCTION':
             return <CrackedLensIcon className={className} />;
         default:
@@ -80,6 +81,7 @@ export const ActiveBonusesDisplay: React.FC<ActiveBonusesDisplayProps> = ({ bonu
             borderColor: '#06b6d4', // cyan-600
             textColor: '#67e8f9', // cyan-300
         },
+        // FIX: Add styles for PPC_REDUCTION
         'PPC_REDUCTION': {
             borderColor: '#dc2626', // red-600
             textColor: '#f87171', // red-400

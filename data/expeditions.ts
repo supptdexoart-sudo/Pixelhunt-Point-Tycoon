@@ -1,4 +1,4 @@
-import { Material, Npc, Location } from '../types.ts';
+import { Material, Npc, Location } from '../types';
 
 export const initialMaterials: Material[] = [
     { id: 'magic_wood', nameKey: 'material_magic_wood_name', icon: 'magic_wood', category: 'material' },

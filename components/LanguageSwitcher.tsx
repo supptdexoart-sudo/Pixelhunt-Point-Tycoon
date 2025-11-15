@@ -1,5 +1,6 @@
 import React from 'react';
-import { useTranslation } from '../contexts/LanguageContext.tsx';
+// FIX: Removed .tsx extension from import
+import { useTranslation } from '../contexts/LanguageContext';
 
 export const LanguageSwitcher: React.FC = () => {
   const { language, setLanguage } = useTranslation();

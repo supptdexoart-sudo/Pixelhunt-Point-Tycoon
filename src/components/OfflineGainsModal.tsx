@@ -1,0 +1,39 @@
+import React from 'react';
+import { useTranslation } from '../contexts/LanguageContext';
+
+interface OfflineGainsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  pointsGained: number;
+  formatNumber: (num: number) => string;
+}
+
+export const OfflineGainsModal: React.FC<OfflineGainsModalProps> = ({ isOpen, onClose, pointsGained, formatNumber }) => {
+  const { t } = useTranslation();
+  
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="pixel-box p-6 text-center max-w-md w-full mx-4 text-white">
+        <h2 className="text-2xl text-shadow-hard text-yellow-300 mb-2">{t('offline_gains_title')}</h2>
+        <p className="text-sm text-gray-400 mb-6 leading-normal">{t('offline_gains_desc')}</p>
+
+        <div className="bg-gray-900/50 border-2 border-gray-900 p-4 mb-6">
+            <p className="text-3xl text-yellow-300 font-semibold text-shadow-hard">
+                {t('offline_gains_points', { points: formatNumber(pointsGained) })}
+            </p>
+        </div>
+
+        <button
+          onClick={onClose}
+          className="w-full bg-yellow-500 text-gray-900 font-bold text-lg py-3 px-4 pixel-button"
+        >
+          {t('offline_gains_button')}
+        </button>
+      </div>
+    </div>
+  );
+};

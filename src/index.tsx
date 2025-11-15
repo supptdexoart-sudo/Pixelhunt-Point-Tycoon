@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import { AuthProvider } from './contexts/AuthContext.tsx';
-import { LanguageProvider } from './contexts/LanguageContext.tsx';
+// FIX: Removed .tsx extension
+import App from './App';
+// FIX: Removed .tsx extension
+import { AuthProvider } from './contexts/AuthContext';
+// FIX: Removed .tsx extension
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

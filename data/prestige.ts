@@ -1,4 +1,4 @@
-import { PrestigeUpgrade } from '../types.ts';
+import { PrestigeUpgrade } from '../types';
 
 type PrestigeTrees = {
     [key: string]: PrestigeUpgrade[];

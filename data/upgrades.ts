@@ -1,4 +1,4 @@
-import { Upgrade } from '../types.ts';
+import { Upgrade } from '../types';
 
 export const initialUpgrades: Upgrade[] = [
   // PPC Upgrades

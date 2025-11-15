@@ -1,24 +1,24 @@
 import React from 'react';
-import { Card } from '../types.ts';
-import { DaggerIcon } from '../components/icons/DaggerIcon.tsx';
-import { PlusIcon } from '../components/icons/PlusIcon.tsx';
-import { AutoClickIcon } from '../components/icons/AutoClickIcon.tsx';
-import { LensIcon } from '../components/icons/LensIcon.tsx';
-import { MountainIcon } from '../components/icons/MountainIcon.tsx';
-import { ShipIcon } from '../components/icons/ShipIcon.tsx';
-import { MetronomeIcon } from '../components/ImageDisplay.tsx';
-import { TransmuteIcon } from '../components/LoadingOverlay.tsx';
-import { GoldenHandIcon } from '../components/ImageUploader.tsx';
-import { SproutIcon } from '../components/icons/SproutIcon.tsx';
-import { ShardClusterIcon } from '../components/icons/ShardClusterIcon.tsx';
-import { FractureIcon } from '../components/icons/FractureIcon.tsx';
-import { CloverIcon } from '../components/icons/CloverIcon.tsx';
-import { PriceTagIcon } from '../components/icons/PriceTagIcon.tsx';
-import { ReticleIcon } from '../components/icons/ReticleIcon.tsx';
-import { ClockIcon } from '../components/icons/ClockIcon.tsx';
-import { WaveIcon } from '../components/icons/WaveIcon.tsx';
-import { MoonIcon } from '../components/icons/MoonIcon.tsx';
-import { PickaxeRelicIcon } from '../components/icons/PickaxeRelicIcon.tsx';
+import { Card } from '../types';
+import { DaggerIcon } from '../components/icons/DaggerIcon';
+import { PlusIcon } from '../components/icons/PlusIcon';
+import { AutoClickIcon } from '../components/icons/AutoClickIcon';
+import { LensIcon } from '../components/icons/LensIcon';
+import { MountainIcon } from '../components/icons/MountainIcon';
+import { ShipIcon } from '../components/icons/ShipIcon';
+import { MetronomeIcon } from '../components/ImageDisplay';
+import { TransmuteIcon } from '../components/LoadingOverlay';
+import { GoldenHandIcon } from '../components/ImageUploader';
+import { SproutIcon } from '../components/icons/SproutIcon';
+import { ShardClusterIcon } from '../components/icons/ShardClusterIcon';
+import { FractureIcon } from '../components/icons/FractureIcon';
+import { CloverIcon } from '../components/icons/CloverIcon';
+import { PriceTagIcon } from '../components/icons/PriceTagIcon';
+import { ReticleIcon } from '../components/icons/ReticleIcon';
+import { ClockIcon } from '../components/icons/ClockIcon';
+import { WaveIcon } from '../components/icons/WaveIcon';
+import { MoonIcon } from '../components/icons/MoonIcon';
+import { PickaxeRelicIcon } from '../components/icons/PickaxeRelicIcon';
 
 
 export const cardPool: Card[] = [
