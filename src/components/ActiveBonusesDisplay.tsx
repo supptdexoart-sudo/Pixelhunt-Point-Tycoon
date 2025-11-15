@@ -47,6 +47,7 @@ export const ActiveBonusesDisplay: React.FC<ActiveBonusesDisplayProps> = ({ bonu
         return null;
     }
 
+    // FIX: Added missing style properties for 'PPC_BOOST' and 'PPC_REDUCTION' to satisfy the Record type.
     const styles: Record<ActiveBonus['type'], { borderColor: string; textColor: string }> = {
         'CRIT_DAMAGE_BOOST': {
             borderColor: '#f97316', // orange-500

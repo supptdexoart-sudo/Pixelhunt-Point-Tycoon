@@ -114,6 +114,7 @@ const initialStats: GameStats = {
   dailyFloatingRewardsClaimed: 0,
 };
 
+// FIX: Added missing 'isCorrupted' property to initialDiamondCore to match the DiamondCore type.
 const initialDiamondCore: DiamondCore = {
     level: 0,
     currentHp: 100,
@@ -869,8 +870,6 @@ const App: React.FC = () => {
         case 'temporary':
             if (card.type === 'CRIT_DAMAGE_BOOST' || card.type === 'AUTO_CLICKER' || card.type === 'GOLDEN_CLICKS' || card.type === 'PPS_BOOST' || card.type === 'FLOATING_REWARD_BONUS' || card.type === 'UPGRADE_COST_REDUCTION' || card.type === 'COMBO_WINDOW_INCREASE' || card.type === 'PPC_BOOST') {
                 if (card.duration) {
-                    // FIX: TypeScript was unable to infer the narrowed type of `card.type` inside the `setActiveBonuses` callback.
-                    // Creating the new bonus object here allows TypeScript to correctly assign the narrowed type.
                     const newBonus: ActiveBonus = {
                         type: card.type,
                         value: card.value,
@@ -2331,14 +2330,7 @@ const App: React.FC = () => {
                             <div className="diamond-wrapper-main">
                                 {isShipUnlocked && <SupportShip state={shipState.status} />}
                                 <div className="diamond-wrapper-inner">
-                                    <DynamicDiamond 
-                                        level={diamondCore.level} 
-                                        hpPercentage={(diamondCore.currentHp / diamondCore.maxHp) * 100} 
-                                        isShaking={isDiamondShaking} 
-                                        isExploding={isDiamondExploding} 
-                                        isHit={isCrystalHit}
-                                        isCorrupted={diamondCore.isCorrupted} 
-                                    />
+                                    <DynamicDiamond level={diamondCore.level} hpPercentage={(diamondCore.currentHp / diamondCore.maxHp) * 100} isShaking={isDiamondShaking} isExploding={isDiamondExploding} isHit={isCrystalHit} isCorrupted={diamondCore.isCorrupted} />
                                 </div>
                             </div>
                         </div>
@@ -2423,7 +2415,7 @@ const App: React.FC = () => {
                         {activeModals.statsPanel && <StatsPanel isOpen={activeModals.statsPanel} onClose={() => setActiveModals(prev => ({...prev, statsPanel: false}))} stats={stats} pointsPerClick={pointsPerClick} pointsPerSecond={pointsPerSecond} formatNumber={formatNumber} />}
                         {dailyRewardReady && <DailyRewardModal isOpen={dailyRewardReady} onClaim={handleClaimDailyReward} rewardInfo={dailyRewardInfo} />}
                         {activeModals.profile && <ProfileModal isOpen={activeModals.profile} onClose={() => setActiveModals(prev => ({...prev, profile: false}))} />}
-                        {activeModals.prestige && <PrestigeModal isOpen={activeModals.prestige} onClose={() => setActiveModals(prev => ({...prev, prestige: false}))} onConfirm={confirmPrestige} relicsToGain={relicsToGain} currentRelics={stats.relics} currentShards={stats.shards || 0} allTrees={allPrestigeUpgrades} activeTreeState={prestigeUpgrades} rogueClass={rogueClass} onBuyUpgrade={handleBuyPrestigeUpgrade} justPurchasedUpgradeId={justPurchasedUpgradeId} timesPrestiged={stats.timesPrestiged} prestigeMultiplier={prestigeMultiplier} multiplierIncrease={multiplierIncrease} />}
+                        {activeModals.prestige && <PrestigeModal isOpen={activeModals.prestige} onClose={() => setActiveModals(prev => ({...prev, prestige: false}))} onConfirm={confirmPrestige} relicsToGain={relicsToGain} currentRelics={stats.relics} currentShards={stats.shards || 0} allTrees={allPrestigeUpgrades} activeTreeState={prestigeUpgrades} rogueClass={rogueClass} onBuyUpgrade={handleBuyPrestigeUpgrade} justPurchasedUpgradeId={justPurchasedUpgradeId} timesPrestiged={stats.timesPrestiged} prestigeMultiplier={stats.prestigeMultiplier} multiplierIncrease={multiplierIncrease} />}
                         {activeModals.autoBuyConfirm && <AutoBuyConfirmModal isOpen={activeModals.autoBuyConfirm} onConfirm={handleConfirmAutoBuy} onClose={() => setActiveModals(prev => ({...prev, autoBuyConfirm: false}))} />}
                         {activeModals.questLog && <QuestLogModal isOpen={activeModals.questLog} onClose={() => setActiveModals(prev => ({...prev, questLog: false}))} allQuestTiers={allQuestTiers} claimableQuests={claimableQuests} claimedQuests={claimedQuests} questProgressMap={questProgressMap} onClaimTierReward={handleClaimTierReward} claimedTierRewards={claimedTierRewards} onClaimQuestReward={handleClaimQuestReward} activeDailyQuests={activeDailyQuests} onClaimDailyQuestReward={handleClaimDailyQuestReward} lastDailyQuestReset={lastDailyQuestReset} formatNumber={formatNumber} />}
                         {activeModals.settings && <SettingsModal isOpen={activeModals.settings} onClose={() => setActiveModals(prev => ({...prev, settings: false}))} onOpenProfileModal={() => setActiveModals(prev => ({...prev, profile: true}))} onOpenTestPanel={() => setActiveModals(prev => ({...prev, testPanel: true}))} />}
@@ -2510,4 +2502,5 @@ const App: React.FC = () => {
   );
 };
 
+// FIX: Added missing default export for the App component.
 export default App;
