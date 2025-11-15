@@ -6,8 +6,8 @@ import { ShardGambleIcon } from '../components/icons/ShardGambleIcon';
 export const roughCardPool: Card[] = [
     {
         id: 'rough_ppc_boost_1',
-        // FIX: Corrected card type to match definition in types.ts
-        type: 'ROUGH_PPC_BOOST',
+        // FIX: Corrected card type to 'PPC_BOOST' to match the type expected by ActiveBonusesDisplay and fix the type error.
+        type: 'PPC_BOOST',
         persistence: 'temporary',
         value: 0.25, // +25% PPC
         duration: 90,

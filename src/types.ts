@@ -216,9 +216,9 @@ export interface SideNotification {
   quantity: number;
 }
 
+// FIX: Added 'ROUGH_PPC_BOOST', 'UNSTABLE_PPS_BOOST', and 'SHARD_GAMBLE' to CardType to resolve type errors in roughCards.ts.
 export type CardType = 'CRIT_DAMAGE_BOOST' | 'ADD_POINTS' | 'AUTO_CLICKER' | 'PPC_MUL' | 'PPS_MUL' | 'COMBO_THRESHOLD_REDUCE' | 'CONVERT_RELIC_TO_SHARD' | 'GOLDEN_CLICKS'
-  | 'PPS_BOOST' | 'ADD_SHARDS' | 'DIAMOND_DAMAGE_MUL' | 'FLOATING_REWARD_BONUS' | 'UPGRADE_COST_REDUCTION' | 'CRIT_CHANCE_BONUS' | 'COMBO_WINDOW_INCREASE' | 'OFFLINE_GAINS_MUL' | 'NEXT_PRESTIGE_RELIC_BONUS'
-  | 'ROUGH_PPC_BOOST' | 'UNSTABLE_PPS_BOOST' | 'SHARD_GAMBLE';
+  | 'PPS_BOOST' | 'ADD_SHARDS' | 'DIAMOND_DAMAGE_MUL' | 'FLOATING_REWARD_BONUS' | 'UPGRADE_COST_REDUCTION' | 'CRIT_CHANCE_BONUS' | 'COMBO_WINDOW_INCREASE' | 'OFFLINE_GAINS_MUL' | 'NEXT_PRESTIGE_RELIC_BONUS' | 'ROUGH_PPC_BOOST' | 'UNSTABLE_PPS_BOOST' | 'SHARD_GAMBLE';
 
 export interface Card {
     id: string;
@@ -231,6 +231,7 @@ export interface Card {
     icon: React.FC<{ className?: string }>;
 }
 
+// FIX: Added 'PPC_BOOST' and 'PPC_REDUCTION' to ActiveBonus type to resolve error in ActiveBonusesDisplay.tsx.
 export interface ActiveBonus {
     type: 'CRIT_DAMAGE_BOOST' | 'AUTO_CLICKER' | 'GOLDEN_CLICKS' | 'PPS_BOOST' | 'FLOATING_REWARD_BONUS' | 'UPGRADE_COST_REDUCTION' | 'COMBO_WINDOW_INCREASE' | 'PPC_BOOST' | 'PPC_REDUCTION';
     value: number;
