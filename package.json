@@ -2,7 +2,6 @@
   "name": "copy-of-v0.7-idle-clicker-game",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://supptdexoart-sudo.github.io/Pixelhunt-Point-Tycoon",
   "type": "module",
   "scripts": {
     "dev": "vite",
