@@ -564,8 +564,8 @@ const App: React.FC = () => {
     return { pointReward, relicReward, multiplier, nextStreak: streak + 1 };
   }, [stats.consecutiveDays, pointsPerSecond]);
   
-  const triggerToast = useCallback((translationKey: string) => {
-    setToastMessage(translationKey);
+  const triggerToast = useCallback((message: string) => {
+    setToastMessage(message);
     setToastKey(k => k + 1);
   }, []);
 
@@ -896,7 +896,6 @@ const App: React.FC = () => {
     const nextLevel = diamondCore.level + 1;
     const nextConfig = getDiamondConfig(nextLevel);
     const newMaxHp = Math.floor(nextConfig.baseHp * Math.pow(1.8, cycle));
-    // FIX: Added missing 'isCorrupted' property to reset the diamond state.
     setDiamondCore({ level: nextLevel, currentHp: newMaxHp, maxHp: newMaxHp, isCorrupted: false });
     
     setActiveModals(prev => ({ ...prev, cardSelection: null }));
@@ -2476,7 +2475,7 @@ const App: React.FC = () => {
                 , modalRoot)}
                 
                 {/* Non-Portal UI */}
-                <ToastNotification message={toastMessage} translationKey={toastKey.toString()} />
+                <ToastNotification message={toastMessage} key={toastKey} />
                 {floatingRewards.map(reward => <FloatingReward key={reward.id} reward={reward} onClick={handleClaimFloatingReward} />)}
                 {pointIndicators.map(indicator => <PointIndicator key={indicator.id} indicator={indicator} onComplete={() => setPointIndicators(current => current.filter(i => i.id !== indicator.id))} />)}
                 {anomalies.map(anomaly => <Anomaly key={anomaly.id} anomaly={anomaly} onClick={(id, x, y) => {

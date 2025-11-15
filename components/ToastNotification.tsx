@@ -2,31 +2,28 @@ import React, { useState, useEffect } from 'react';
 
 interface ToastNotificationProps {
   message: string | null;
-  translationKey?: string;
 }
 
-export const ToastNotification: React.FC<ToastNotificationProps> = ({ message, translationKey }) => {
+export const ToastNotification: React.FC<ToastNotificationProps> = ({ message }) => {
   const [visible, setVisible] = useState(false);
-  const [currentMessage, setCurrentMessage] = useState(message);
 
   useEffect(() => {
     if (message) {
-      setCurrentMessage(message);
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
       }, 4000); // Display for 4 seconds
       return () => clearTimeout(timer);
     }
-  }, [message, translationKey]);
+  }, [message]);
 
-  if (!currentMessage || !visible) {
+  if (!message || !visible) {
     return null;
   }
 
   return (
     <div className="toast-notification pixel-box bg-green-700 text-white p-4 text-center text-sm fixed top-5">
-      <p className="text-shadow-hard">{currentMessage}</p>
+      <p className="text-shadow-hard">{message}</p>
     </div>
   );
 };
