@@ -1,0 +1,22 @@
+{
+  "name": "Pixel Point Tycoon",
+  "short_name": "Pixel Tycoon",
+  "description": "A simple and addictive idle clicker game. Click to earn points, buy upgrades, and watch your empire grow automatically!",
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "scope": ".",
+  "display": "fullscreen",
+  "theme_color": "#111827",
+  "background_color": "#111827"
+}
