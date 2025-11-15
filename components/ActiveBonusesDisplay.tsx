@@ -8,6 +8,7 @@ import { SproutIcon } from './icons/SproutIcon';
 import { CloverIcon } from './icons/CloverIcon';
 import { PriceTagIcon } from './icons/PriceTagIcon';
 import { WaveIcon } from './icons/WaveIcon';
+import { CrackedLensIcon } from './icons/CrackedLensIcon';
 
 interface ActiveBonusesDisplayProps {
   bonuses: ActiveBonus[];
@@ -30,6 +31,11 @@ const BonusIcon: React.FC<{ type: ActiveBonus['type']; className?: string }> = (
             return <PriceTagIcon className={className} />;
         case 'COMBO_WINDOW_INCREASE':
             return <WaveIcon className={className} />;
+        // FIX: Added missing icons for new bonus types.
+        case 'PPC_BOOST':
+            return <CrackedLensIcon className={className} />;
+        case 'PPC_REDUCTION':
+            return <CrackedLensIcon className={className} />;
         default:
             return null;
     }
@@ -42,6 +48,7 @@ export const ActiveBonusesDisplay: React.FC<ActiveBonusesDisplayProps> = ({ bonu
         return null;
     }
 
+    // FIX: Added missing style properties for 'PPC_BOOST' and 'PPC_REDUCTION' to satisfy the Record type.
     const styles: Record<ActiveBonus['type'], { borderColor: string; textColor: string }> = {
         'CRIT_DAMAGE_BOOST': {
             borderColor: '#f97316', // orange-500
@@ -70,6 +77,14 @@ export const ActiveBonusesDisplay: React.FC<ActiveBonusesDisplayProps> = ({ bonu
         'COMBO_WINDOW_INCREASE': {
             borderColor: '#3b82f6', // blue-500
             textColor: '#93c5fd', // blue-300
+        },
+        'PPC_BOOST': {
+            borderColor: '#06b6d4', // cyan-600
+            textColor: '#67e8f9', // cyan-300
+        },
+        'PPC_REDUCTION': {
+            borderColor: '#dc2626', // red-600
+            textColor: '#f87171', // red-400
         }
     };
 

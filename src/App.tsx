@@ -1,59 +1,59 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Header } from '../components/Header';
-import { UpgradePanel } from '../components/UpgradePanel';
-import { StatsPanel } from '../components/StatsPanel';
-import { DailyRewardModal } from '../components/DailyRewardModal';
-import { ProfileModal } from '../components/ProfileModal';
-import { PrestigeModal } from '../components/PrestigeConfirmModal';
-import { SettingsModal } from '../components/SettingsModal';
-import { DynamicDiamond, getDiamondConfig, getDiamondConfigCount } from '../components/DynamicDiamond';
-import { PrestigeAnimationOverlay } from '../components/PrestigeAnimationOverlay';
-import { FloatingReward } from '../components/FloatingReward';
-import { PointIndicator } from '../components/PointIndicator';
-import { TestPanel } from '../components/TestPanel';
-import { ToastNotification } from '../components/ToastNotification';
-import { AdModal } from '../components/AdModal';
-import { AutoBuyConfirmModal } from '../components/AutoBuyConfirmModal';
-import { QuestLogModal } from '../components/QuestLogModal';
-import { Anomaly } from '../components/Ghost';
-import { GenesisDiamond } from '../components/GenesisDiamond';
-import { GenesisIntroModal } from '../components/GenesisIntroModal';
-import { ShopModal } from '../components/ShopModal';
-import { RiftIntroModal } from '../components/RiftIntroModal';
-import { FloatingRewardIntroModal } from '../components/FloatingRewardIntroModal';
-import { ShopIntroModal } from '../components/ShopIntroModal';
-import { ExpeditionModal } from '../components/ExpeditionModal';
-import { ExpeditionIntroModal } from '../components/ExpeditionIntroModal';
-import { LoadingSpinner } from '../components/LoadingSpinner';
-import { LockedFeatureModal } from '../components/LockedFeatureModal';
-import { PrestigeIntroModal } from '../components/PrestigeIntroModal';
-import { RetainIntroModal } from '../components/RetainIntroModal';
-import { OfflineGainsModal } from '../components/OfflineGainsModal';
-import { SideNotification } from '../components/SideNotification';
-import { RiftProjectile } from '../components/RiftProjectile';
-import { RogueClassSelectionModal } from '../components/RogueClassSelectionModal';
-import { CardSelectionModal } from '../components/CardSelectionModal';
-import { CardJournalModal } from '../components/CardJournalModal';
-import { JournalIcon } from '../components/icons/JournalIcon';
-import { ActiveBonusesDisplay } from '../components/ActiveBonusesDisplay';
-import { SupportShip } from '../components/SupportShip';
-import { PathIcon } from '../components/icons/PathIcon';
+import { Header } from './components/Header';
+import { UpgradePanel } from './components/UpgradePanel';
+import { StatsPanel } from './components/StatsPanel';
+import { DailyRewardModal } from './components/DailyRewardModal';
+import { ProfileModal } from './components/ProfileModal';
+import { PrestigeModal } from './components/PrestigeConfirmModal';
+import { SettingsModal } from './components/SettingsModal';
+import { DynamicDiamond, getDiamondConfig, getDiamondConfigCount } from './components/DynamicDiamond';
+import { PrestigeAnimationOverlay } from './components/PrestigeAnimationOverlay';
+import { FloatingReward } from './components/FloatingReward';
+import { PointIndicator } from './components/PointIndicator';
+import { TestPanel } from './components/TestPanel';
+import { ToastNotification } from './components/ToastNotification';
+import { AdModal } from './components/AdModal';
+import { AutoBuyConfirmModal } from './components/AutoBuyConfirmModal';
+import { QuestLogModal } from './components/QuestLogModal';
+import { Anomaly } from './components/Ghost';
+import { GenesisDiamond } from './components/GenesisDiamond';
+import { GenesisIntroModal } from './components/GenesisIntroModal';
+import { ShopModal } from './components/ShopModal';
+import { RiftIntroModal } from './components/RiftIntroModal';
+import { FloatingRewardIntroModal } from './components/FloatingRewardIntroModal';
+import { ShopIntroModal } from './components/ShopIntroModal';
+import { ExpeditionModal } from './components/ExpeditionModal';
+import { ExpeditionIntroModal } from './components/ExpeditionIntroModal';
+import { LoadingSpinner } from './components/LoadingSpinner';
+import { LockedFeatureModal } from './components/LockedFeatureModal';
+import { PrestigeIntroModal } from './components/PrestigeIntroModal';
+import { RetainIntroModal } from './components/RetainIntroModal';
+import { OfflineGainsModal } from './components/OfflineGainsModal';
+import { SideNotification } from './components/SideNotification';
+import { RiftProjectile } from './components/RiftProjectile';
+import { RogueClassSelectionModal } from './components/RogueClassSelectionModal';
+import { CardSelectionModal } from './components/CardSelectionModal';
+import { CardJournalModal } from './components/CardJournalModal';
+import { JournalIcon } from './components/icons/JournalIcon';
+import { ActiveBonusesDisplay } from './components/ActiveBonusesDisplay';
+import { SupportShip } from './components/SupportShip';
+import { PathIcon } from './components/icons/PathIcon';
 
 
-import { useAuth } from '../contexts/AuthContext';
-import { useTranslation } from '../contexts/LanguageContext';
+import { useAuth } from './contexts/AuthContext';
+import { useTranslation } from './contexts/LanguageContext';
 
 // FIX: Import Anomaly type from types.ts
 import { GameStats, Upgrade, PrestigeUpgrade, FloatingReward as FloatingRewardType, PointIndicator as PointIndicatorType, DiamondCore, QuestTier, ShopPurchases, InventoryItem, Npc, Expedition, QuestDefinition, Anomaly as AnomalyType, SideNotification as SideNotificationType, RiftProjectile as RiftProjectileType, Card, ActiveBonus, ActiveDailyQuest, DailyQuestStat } from './types';
-import { initialUpgrades as initialUpgradesData } from '../data/upgrades';
-import { prestigeTrees } from '../data/prestige';
-import { initialQuestTiers as initialQuestTiersData } from '../data/quests';
-import { initialLocations, initialNpcs } from '../data/expeditions';
-import { cardPool } from '../data/cards';
-import { dailyQuestsPool } from '../data/dailyQuests';
-import { roughCardPool } from '../data/roughCards';
+import { initialUpgrades as initialUpgradesData } from './data/upgrades';
+import { prestigeTrees } from './data/prestige';
+import { initialQuestTiers as initialQuestTiersData } from './data/quests';
+import { initialLocations, initialNpcs } from './data/expeditions';
+import { cardPool } from './data/cards';
+import { dailyQuestsPool } from './data/dailyQuests';
+import { roughCardPool } from './data/roughCards';
 
 
 // Constants
@@ -564,8 +564,8 @@ const App: React.FC = () => {
     return { pointReward, relicReward, multiplier, nextStreak: streak + 1 };
   }, [stats.consecutiveDays, pointsPerSecond]);
   
-  const triggerToast = useCallback((message: string) => {
-    setToastMessage(message);
+  const triggerToast = useCallback((translationKey: string) => {
+    setToastMessage(translationKey);
     setToastKey(k => k + 1);
   }, []);
 

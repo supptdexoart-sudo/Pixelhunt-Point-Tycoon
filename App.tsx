@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -112,10 +113,12 @@ const initialStats: GameStats = {
   dailyFloatingRewardsClaimed: 0,
 };
 
+// FIX: Property 'isCorrupted' is missing in type '{ level: number; currentHp: number; maxHp: number; }' but required in type 'DiamondCore'.
 const initialDiamondCore: DiamondCore = {
     level: 0,
     currentHp: 100,
     maxHp: 100,
+    isCorrupted: false,
 };
 
 const initialShopPurchases: ShopPurchases = {
@@ -843,7 +846,8 @@ const App: React.FC = () => {
     const nextLevel = diamondCore.level + 1;
     const nextConfig = getDiamondConfig(nextLevel);
     const newMaxHp = Math.floor(nextConfig.baseHp * Math.pow(1.8, cycle));
-    setDiamondCore({ level: nextLevel, currentHp: newMaxHp, maxHp: newMaxHp });
+    // FIX: Argument of type '{ level: number; currentHp: number; maxHp: number; }' is not assignable to parameter of type 'SetStateAction<DiamondCore>'.
+    setDiamondCore({ level: nextLevel, currentHp: newMaxHp, maxHp: newMaxHp, isCorrupted: false });
     
     setActiveModals(prev => ({ ...prev, cardSelection: false }));
   }, [addPoints, t, triggerToast, formatNumber, diamondCore.level, pointsPerSecond, stats.relics, rogueClassBonuses]);
