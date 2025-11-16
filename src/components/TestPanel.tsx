@@ -25,6 +25,7 @@ interface TestPanelProps {
   onResetDailyQuests: () => void;
   onCompleteDailyQuests: () => void;
   onTriggerCorruptedDiamond: () => void;
+  onTriggerSharpeningStone: () => void;
 }
 
 export const TestPanel: React.FC<TestPanelProps> = ({
@@ -33,7 +34,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
   onSpawnFloatingReward, onTriggerRiftEvent, onResetGame, onUnlockPrestige,
   onCompleteExpeditions, onTriggerRelicDrop, onTriggerShardDrop, onAddRetainedLevels,
   onAddExpeditionMaterials, onResetIntros, onTestDestroyDiamond,
-  onResetDailyQuests, onCompleteDailyQuests, onTriggerCorruptedDiamond
+  onResetDailyQuests, onCompleteDailyQuests, onTriggerCorruptedDiamond, onTriggerSharpeningStone
 }) => {
   const { t } = useTranslation();
   const [pointsAmount, setPointsAmount] = useState('1000');
@@ -125,7 +126,10 @@ export const TestPanel: React.FC<TestPanelProps> = ({
             <button onClick={onResetDailyQuests} className="pixel-button bg-yellow-800 p-2 w-full">{t('test_reset_daily_quests')}</button>
             <button onClick={onCompleteDailyQuests} className="pixel-button bg-yellow-700 p-2 w-full">{t('test_complete_daily_quests')}</button>
           </div>
-          <button onClick={onTriggerCorruptedDiamond} className="pixel-button bg-purple-800 hover:bg-purple-700 p-2 w-full mt-2">{t('test_trigger_corrupted_diamond')}</button>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <button onClick={onTriggerCorruptedDiamond} className="pixel-button bg-purple-800 hover:bg-purple-700 p-2 w-full">{t('test_trigger_corrupted_diamond')}</button>
+            <button onClick={onTriggerSharpeningStone} className="pixel-button bg-gray-600 hover:bg-gray-500 p-2 w-full">{t('test_trigger_sharpening_stone')}</button>
+          </div>
 
 
           <div className="border-t-2 border-gray-700 my-4"></div>

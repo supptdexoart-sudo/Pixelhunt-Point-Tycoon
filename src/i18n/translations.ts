@@ -120,6 +120,7 @@ export const translations: any = {
     active_bonus_COMBO_WINDOW_INCREASE: "Easy Rhythm",
     active_bonus_PPC_BOOST: "PPC Boost",
     active_bonus_PPC_REDUCTION: "PPC Drain",
+    active_bonus_SHARPENED_CLICKS: "Sharpened Clicks",
 
 
     // Card Journal
@@ -402,6 +403,7 @@ export const translations: any = {
     test_complete_daily_quests: "Complete Daily Quests",
     test_reset_daily_quests_toast: "Daily quests have been reset!",
     test_complete_daily_quests_toast: "All daily quests are now complete!",
+    test_trigger_corrupted_diamond: "Trigger Corrupted Diamond",
 
     // Quest Log
     quest_log_title: "Quest Log",
@@ -556,6 +558,7 @@ export const translations: any = {
     corrupted_diamond_break_toast: "Corruption shattered! You found {count} Shards!",
     shard_gamble_win_toast: "Lucky! You gained 3 Shards!",
     shard_gamble_lose_toast: "Unlucky... you lost 1 Shard.",
+    sharpening_stone_activated_toast: "Clicks Sharpened! +900% Diamond Damage!",
 
     // Expedition System
     expedition_guild_title: "Base",
@@ -619,6 +622,11 @@ export const translations: any = {
     combo_name_1: 'Good',
     combo_name_2: 'Great!',
     combo_name_3: 'Awesome!!',
+
+    // Sharpening Stone
+    sharpening_stone_intro_title: "A Sharpening Stone!",
+    sharpening_stone_intro_desc: "This stone has appeared to aid you. Click it to temporarily sharpen your clicks, dealing massive bonus damage to the diamond!",
+    sharpening_stone_intro_button: "Got It!",
   },
   cz: {
     header_title: "Klikač Diamantů",
@@ -733,6 +741,7 @@ export const translations: any = {
     active_bonus_COMBO_WINDOW_INCREASE: "Lehký rytmus",
     active_bonus_PPC_BOOST: "BZK Zvýšení",
     active_bonus_PPC_REDUCTION: "BZK Odtok",
+    active_bonus_SHARPENED_CLICKS: "Nabroušené kliky",
 
     card_journal_title: "Deník karet",
     card_journal_desc: "Toto jsou vaše sebrané karty. Jejich bonusy jsou aktivní, dokud neprovedete Prestiž.",
@@ -977,6 +986,7 @@ export const translations: any = {
     test_complete_daily_quests: "Dokončit denní úkoly",
     test_reset_daily_quests_toast: "Denní úkoly byly resetovány!",
     test_complete_daily_quests_toast: "Všechny denní úkoly jsou nyní dokončeny!",
+    test_trigger_corrupted_diamond: "Spustit zkažený diamant",
 
     quest_log_title: "Záznam úkolů",
     quest_log_tab_main: "Hlavní",
@@ -1125,6 +1135,7 @@ export const translations: any = {
     corrupted_diamond_break_toast: "Zkaženost zničena! Našli jste {count} Střepů!",
     shard_gamble_win_toast: "Štěstí! Získali jste 3 Střepy!",
     shard_gamble_lose_toast: "Smůla... ztratili jste 1 Střep.",
+    sharpening_stone_activated_toast: "Kliky nabroušeny! +900% Poškození diamantu!",
 
     expedition_guild_title: "Základna",
     expedition_intro_title: "Základna odemčena!",
@@ -1182,5 +1193,10 @@ export const translations: any = {
     combo_name_1: 'Dobré',
     combo_name_2: 'Skvělé!',
     combo_name_3: 'Úžasné!!',
+    
+    // Sharpening Stone
+    sharpening_stone_intro_title: "Brusný kámen!",
+    sharpening_stone_intro_desc: "Objevil se tento kámen, aby ti pomohl. Klikni na něj, abys dočasně nabrousil své kliky, které budou způsobovat masivní bonusové poškození diamantu!",
+    sharpening_stone_intro_button: "Rozumím!",
   }
 };

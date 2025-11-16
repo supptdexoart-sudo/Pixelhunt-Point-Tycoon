@@ -233,9 +233,9 @@ export interface Card {
     icon: React.FC<{ className?: string }>;
 }
 
-// FIX: Added 'PPC_BOOST' and 'PPC_REDUCTION' to ActiveBonus type to resolve error in ActiveBonusesDisplay.tsx.
+// FIX: Added 'PPC_BOOST', 'PPC_REDUCTION', and 'SHARPENED_CLICKS' to ActiveBonus type to resolve error in ActiveBonusesDisplay.tsx and support new mechanics.
 export interface ActiveBonus {
-    type: 'CRIT_DAMAGE_BOOST' | 'AUTO_CLICKER' | 'GOLDEN_CLICKS' | 'PPS_BOOST' | 'FLOATING_REWARD_BONUS' | 'UPGRADE_COST_REDUCTION' | 'COMBO_WINDOW_INCREASE' | 'PPC_BOOST' | 'PPC_REDUCTION';
+    type: 'CRIT_DAMAGE_BOOST' | 'AUTO_CLICKER' | 'GOLDEN_CLICKS' | 'PPS_BOOST' | 'FLOATING_REWARD_BONUS' | 'UPGRADE_COST_REDUCTION' | 'COMBO_WINDOW_INCREASE' | 'PPC_BOOST' | 'PPC_REDUCTION' | 'SHARPENED_CLICKS';
     value: number;
     expiresAt: number;
 }
@@ -269,4 +269,10 @@ export interface ActiveDailyQuest {
     reward: DailyQuestReward;
     completed: boolean;
     claimed: boolean;
+}
+
+export interface SharpeningStoneEvent {
+  id: number;
+  x: number;
+  y: number;
 }

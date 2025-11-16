@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ActiveBonus } from '../types';
 import { useTranslation } from '../contexts/LanguageContext';
@@ -8,7 +9,9 @@ import { SproutIcon } from './icons/SproutIcon';
 import { CloverIcon } from './icons/CloverIcon';
 import { PriceTagIcon } from './icons/PriceTagIcon';
 import { WaveIcon } from './icons/WaveIcon';
+// FIX: Import missing icons for new bonus types
 import { CrackedLensIcon } from './icons/CrackedLensIcon';
+import { SharpeningStoneIcon } from './icons/SharpeningStoneIcon';
 
 interface ActiveBonusesDisplayProps {
   bonuses: ActiveBonus[];
@@ -31,10 +34,13 @@ const BonusIcon: React.FC<{ type: ActiveBonus['type']; className?: string }> = (
             return <PriceTagIcon className={className} />;
         case 'COMBO_WINDOW_INCREASE':
             return <WaveIcon className={className} />;
+        // FIX: Add cases for new bonus types
         case 'PPC_BOOST':
             return <CrackedLensIcon className={className} />;
         case 'PPC_REDUCTION':
             return <CrackedLensIcon className={className} />;
+        case 'SHARPENED_CLICKS':
+            return <SharpeningStoneIcon className={className} />;
         default:
             return null;
     }
@@ -47,7 +53,7 @@ export const ActiveBonusesDisplay: React.FC<ActiveBonusesDisplayProps> = ({ bonu
         return null;
     }
 
-    // FIX: Added missing style properties for 'PPC_BOOST' and 'PPC_REDUCTION' to satisfy the Record type.
+    // FIX: Added missing style properties for new bonus types to satisfy the Record type.
     const styles: Record<ActiveBonus['type'], { borderColor: string; textColor: string }> = {
         'CRIT_DAMAGE_BOOST': {
             borderColor: '#f97316', // orange-500
@@ -84,6 +90,10 @@ export const ActiveBonusesDisplay: React.FC<ActiveBonusesDisplayProps> = ({ bonu
         'PPC_REDUCTION': {
             borderColor: '#dc2626', // red-600
             textColor: '#f87171', // red-400
+        },
+        'SHARPENED_CLICKS': {
+            borderColor: '#9ca3af', // gray-400
+            textColor: '#e5e7eb', // gray-200
         }
     };
 
