@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ActiveBonus } from '../types';
 import { useTranslation } from '../contexts/LanguageContext';

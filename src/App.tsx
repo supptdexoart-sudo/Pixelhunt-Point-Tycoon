@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -41,7 +40,6 @@ import { JournalIcon } from './components/icons/JournalIcon';
 import { ActiveBonusesDisplay } from './components/ActiveBonusesDisplay';
 import { SupportShip } from './components/SupportShip';
 import { PathIcon } from './components/icons/PathIcon';
-// FIX: Add imports for Sharpening Stone feature
 import { SharpeningStoneEvent } from './components/SharpeningStoneEvent';
 import { SharpeningStoneIntroModal } from './components/SharpeningStoneIntroModal';
 
@@ -49,7 +47,6 @@ import { SharpeningStoneIntroModal } from './components/SharpeningStoneIntroModa
 import { useAuth } from './contexts/AuthContext';
 import { useTranslation } from './contexts/LanguageContext';
 
-// FIX: Import Anomaly type from types.ts
 import { GameStats, Upgrade, PrestigeUpgrade, FloatingReward as FloatingRewardType, PointIndicator as PointIndicatorType, DiamondCore, QuestTier, ShopPurchases, InventoryItem, Npc, Expedition, QuestDefinition, Anomaly as AnomalyType, SideNotification as SideNotificationType, RiftProjectile as RiftProjectileType, Card, ActiveBonus, ActiveDailyQuest, DailyQuestStat, SharpeningStoneEvent as SharpeningStoneEventType } from './types';
 import { initialUpgrades as initialUpgradesData } from './data/upgrades';
 import { prestigeTrees } from './data/prestige';
@@ -58,7 +55,6 @@ import { initialLocations, initialNpcs } from './data/expeditions';
 import { cardPool } from './data/cards';
 import { dailyQuestsPool } from './data/dailyQuests';
 import { roughCardPool } from './data/roughCards';
-
 
 // Constants
 const TIME_BONUS_COOLDOWN = 900; // 15 minutes
@@ -79,7 +75,6 @@ const SHIP_SHOOT_DURATION = 15000; // 15 seconds
 const SHIP_COOLDOWN_DURATION = 10000; // 10 seconds
 const SHIP_BONUS_PPS_MULTIPLIER = 0.20; // 20% of base PPS
 
-// FIX: Add constants for Sharpening Stone event
 const SHARPENING_STONE_MIN_INTERVAL = 300 * 1000; // 5 minutes
 const SHARPENING_STONE_MAX_INTERVAL = 600 * 1000; // 10 minutes
 const SHARPENING_STONE_LIFETIME = 15000; // 15 seconds
@@ -123,7 +118,7 @@ const initialStats: GameStats = {
   dailyFloatingRewardsClaimed: 0,
 };
 
-// FIX: Added missing 'isCorrupted' property to initialDiamondCore to match the DiamondCore type.
+// FIX: Add missing 'isCorrupted' property to satisfy the DiamondCore type.
 const initialDiamondCore: DiamondCore = {
     level: 0,
     currentHp: 100,
@@ -183,7 +178,6 @@ interface GameState {
   nextPrestigeRelicBonus: number;
   activeDailyQuests: ActiveDailyQuest[];
   lastDailyQuestReset: string | null;
-  // FIX: Add sharpening stone state for saving
   sharpeningStones: SharpeningStoneEventType[];
   hasSeenSharpeningStoneIntro: boolean;
 }
@@ -211,7 +205,6 @@ interface ActiveModals {
     prestigeIntro: boolean;
     retainIntro: boolean;
     lockedFeature: { nameKey: string; type: 'quest' | 'prestige'; value: string | number } | null;
-    // FIX: Add sharpening stone intro modal to active modals
     sharpeningStoneIntro: boolean;
 }
 
@@ -238,7 +231,6 @@ const initialActiveModals: ActiveModals = {
     prestigeIntro: false,
     retainIntro: false,
     lockedFeature: null,
-    // FIX: Add sharpening stone intro modal to initial state
     sharpeningStoneIntro: false,
 };
 
@@ -298,7 +290,7 @@ const App: React.FC = () => {
   const [activeDailyQuests, setActiveDailyQuests] = useState<ActiveDailyQuest[]>([]);
   const [lastDailyQuestReset, setLastDailyQuestReset] = useState<string | null>(null);
 
-  // FIX: Add state for Sharpening Stone feature
+  // Sharpening Stone State
   const [sharpeningStones, setSharpeningStones] = useState<SharpeningStoneEventType[]>([]);
   const [hasSeenSharpeningStoneIntro, setHasSeenSharpeningStoneIntro] = useState(false);
 
@@ -331,7 +323,6 @@ const App: React.FC = () => {
 
   // Rift Event State
   const [isRiftEventActive, setRiftEventActive] = useState(false);
-  // FIX: Use the imported AnomalyType which is an alias for Anomaly
   const [anomalies, setAnomalies] = useState<AnomalyType[]>([]);
   const [projectiles, setProjectiles] = useState<RiftProjectileType[]>([]);
   const [pointsDrainedPerSecond, setPointsDrainedPerSecond] = useState(0);
@@ -344,7 +335,6 @@ const App: React.FC = () => {
   const riftEventTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const riftEventDurationRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const floatingRewardSpawnerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // FIX: Add ref for sharpening stone spawner
   const sharpeningStoneSpawnerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const modalRoot = useMemo(() => document.getElementById('modal-root'), []);
@@ -513,7 +503,6 @@ const App: React.FC = () => {
         floatingRewardMultiplier: 1,
         costReduction: 1,
         comboWindowMultiplier: 1,
-        // FIX: Add sharpenedClicks for the new mechanic
         sharpenedClicks: 0,
     };
     activeBonuses.forEach(b => {
@@ -920,7 +909,6 @@ const App: React.FC = () => {
     const nextLevel = diamondCore.level + 1;
     const nextConfig = getDiamondConfig(nextLevel);
     const newMaxHp = Math.floor(nextConfig.baseHp * Math.pow(1.8, cycle));
-    // FIX: Add missing 'isCorrupted' property when setting new diamond core state.
     setDiamondCore({ level: nextLevel, currentHp: newMaxHp, maxHp: newMaxHp, isCorrupted: false });
     
     setActiveModals(prev => ({ ...prev, cardSelection: null }));
@@ -1778,7 +1766,12 @@ const App: React.FC = () => {
     setAnomalies(current => current.map(g => ({ ...g, disappearing: true })));
     setProjectiles([]);
     setTimeout(() => setAnomalies([]), 1000);
-  }, []);
+    // 5% chance for a corrupted diamond
+    if (Math.random() < 0.05) {
+        setDiamondCore(prev => ({...prev, isCorrupted: true}));
+        triggerToast(t('corrupted_diamond_appeared_toast'));
+    }
+  }, [t, triggerToast]);
   
   const handleAnomalyClick = useCallback((id: number) => {
     setAnomalies(current => {
@@ -2486,7 +2479,7 @@ const App: React.FC = () => {
                         shopPurchases={shopPurchases}
                         isAdBonusActive={isAdBonusActive}
                         adBonusCooldownLeft={adBonusCooldownLeft}
-                        onWatchAd={onWatchAd}
+                        onWatchAd={handleWatchAd}
                         formatCooldown={formatCooldown}
                         relicsToGain={relicsToGain}
                         onPrestige={handlePrestigeClick}
@@ -2537,13 +2530,14 @@ const App: React.FC = () => {
                         {activeModals.ad && <AdModal isOpen={activeModals.ad} onComplete={handleAdComplete} />}
                         {activeModals.genesisIntro && <GenesisIntroModal isOpen={activeModals.genesisIntro} onClose={handleCloseGenesisIntro} pointsReward={25} upgradeName={t('upgrade_ppc_1_name')} />}
                         {offlineGains !== null && <OfflineGainsModal isOpen={offlineGains !== null} onClose={() => setOfflineGains(null)} pointsGained={offlineGains} formatNumber={formatNumber} />}
-                        {activeModals.cardSelection && <CardSelectionModal isOpen={!!activeModals.cardSelection} cards={activeModals.cardSelection.cards} onSelectCard={handleSelectCard} titleKey={activeModals.cardSelection.titleKey} descKey={activeModals.cardSelection.descKey} />}
+                        {activeModals.cardSelection && <CardSelectionModal isOpen={!!activeModals.cardSelection} {...activeModals.cardSelection} onSelectCard={handleSelectCard} />}
                         {activeModals.cardJournal && <CardJournalModal isOpen={activeModals.cardJournal} onClose={() => setActiveModals(prev => ({...prev, cardJournal: false}))} cards={collectedCards} />}
                         {activeModals.riftIntro && <RiftIntroModal isOpen={activeModals.riftIntro} onConfirm={handleConfirmRiftIntro} />}
                         {activeModals.floatingRewardIntro && <FloatingRewardIntroModal isOpen={activeModals.floatingRewardIntro} onConfirm={handleConfirmFloatingRewardIntro} />}
                         {activeModals.shopIntro && <ShopIntroModal isOpen={activeModals.shopIntro} onConfirm={handleConfirmShopIntro} />}
                         {activeModals.prestigeIntro && <PrestigeIntroModal isOpen={activeModals.prestigeIntro} onConfirm={handleConfirmPrestigeIntro} />}
                         {activeModals.retainIntro && <RetainIntroModal isOpen={activeModals.retainIntro} onConfirm={handleConfirmRetainIntro} />}
+                        {activeModals.sharpeningStoneIntro && <SharpeningStoneIntroModal isOpen={activeModals.sharpeningStoneIntro} onConfirm={handleConfirmSharpeningStoneIntro} />}
                         {activeModals.lockedFeature && <LockedFeatureModal
                             featureName={t(activeModals.lockedFeature.nameKey)}
                             unlockDescription={
@@ -2556,19 +2550,18 @@ const App: React.FC = () => {
                         {activeModals.shop && <ShopModal isOpen={activeModals.shop} onClose={() => setActiveModals(prev => ({...prev, shop: false}))} shards={stats.shards || 0} shopPurchases={shopPurchases} onBuyItem={handleBuyShopItem} onApplyCosmetic={handleApplyCosmetic} activeCosmetic={activeCosmetic} />}
                         {activeModals.expedition && <ExpeditionModal isOpen={activeModals.expedition} onClose={() => setActiveModals(prev => ({...prev, expedition: false}))} npcs={npcs} locations={initialLocations} expeditions={expeditions} inventory={inventory} inventoryCapacity={inventoryCapacity} onStartExpedition={handleStartExpedition} onClaimExpedition={handleClaimExpedition} onUpgradeNpc={handleUpgradeNpc} />}
                         {activeModals.expeditionIntro && <ExpeditionIntroModal isOpen={activeModals.expeditionIntro} onConfirm={handleConfirmExpeditionIntro} />}
-                        {activeModals.sharpeningStoneIntro && <SharpeningStoneIntroModal isOpen={activeModals.sharpeningStoneIntro} onConfirm={handleConfirmSharpeningStoneIntro} />}
                     </>
                 , modalRoot)}
                 
                 {/* Non-Portal UI */}
-                <ToastNotification message={toastMessage} translationKey={toastKey.toString()} />
+                <ToastNotification message={toastMessage} translationKey={`${toastKey}`} />
                 {floatingRewards.map(reward => <FloatingReward key={reward.id} reward={reward} onClick={handleClaimFloatingReward} />)}
+                {sharpeningStones.map(stone => <SharpeningStoneEvent key={stone.id} stone={stone} onClick={handleSharpeningStoneClick} />)}
                 {pointIndicators.map(indicator => <PointIndicator key={indicator.id} indicator={indicator} onComplete={() => setPointIndicators(current => current.filter(i => i.id !== indicator.id))} />)}
                 {anomalies.map(anomaly => <Anomaly key={anomaly.id} anomaly={anomaly} onClick={(id, x, y) => {
                     handleAnomalyClick(id);
                     setPointIndicators(current => [...current, { id: Date.now(), x, y, value: `stabilized!`, type: 'bonus' }]);
                 }} onFire={handleFireProjectile} />)}
-                {sharpeningStones.map(stone => <SharpeningStoneEvent key={stone.id} stone={stone} onClick={handleSharpeningStoneClick} />)}
                 {projectiles.map(proj => <RiftProjectile key={proj.id} projectile={proj} onComplete={handleProjectileComplete} />)}
                 {sideNotifications.map(notification => (
                     <SideNotification key={notification.id} notification={notification} onComplete={handleRemoveSideNotification} />

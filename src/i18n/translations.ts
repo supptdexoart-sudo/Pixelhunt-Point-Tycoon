@@ -404,6 +404,7 @@ export const translations: any = {
     test_reset_daily_quests_toast: "Daily quests have been reset!",
     test_complete_daily_quests_toast: "All daily quests are now complete!",
     test_trigger_corrupted_diamond: "Trigger Corrupted Diamond",
+    test_trigger_sharpening_stone: "Trigger Sharpening Stone",
 
     // Quest Log
     quest_log_title: "Quest Log",
@@ -987,6 +988,7 @@ export const translations: any = {
     test_reset_daily_quests_toast: "Denní úkoly byly resetovány!",
     test_complete_daily_quests_toast: "Všechny denní úkoly jsou nyní dokončeny!",
     test_trigger_corrupted_diamond: "Spustit zkažený diamant",
+    test_trigger_sharpening_stone: "Spustit brusný kámen",
 
     quest_log_title: "Záznam úkolů",
     quest_log_tab_main: "Hlavní",
