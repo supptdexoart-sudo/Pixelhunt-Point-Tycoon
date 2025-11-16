@@ -40,6 +40,7 @@ import { JournalIcon } from './components/icons/JournalIcon.tsx';
 import { ActiveBonusesDisplay } from './components/ActiveBonusesDisplay.tsx';
 import { SupportShip } from './components/SupportShip.tsx';
 import { PathIcon } from './components/icons/PathIcon.tsx';
+import { AdModal } from './components/icons/AdModal.tsx';
 
 
 import { useAuth } from './contexts/AuthContext.tsx';
